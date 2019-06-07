@@ -45,7 +45,7 @@ func TestGetInt32Var(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt32Var(variableName, tt.fallback)
+			v, err := GetInt32Var(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -62,7 +62,7 @@ func TestGetInt32Var(t *testing.T) {
 func TestGetInt32VarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeInt32Var(variableName, 12)
+	v, err := GetInt32Var(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -82,7 +82,7 @@ func TestGetInt32VarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt32Var(variableName, 0)
+			v, err := GetInt32Var(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")

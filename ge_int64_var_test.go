@@ -44,7 +44,7 @@ func TestGetInt64Var(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt64Var(variableName, tt.fallback)
+			v, err := GetInt64Var(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -61,7 +61,7 @@ func TestGetInt64Var(t *testing.T) {
 func TestGetInt64VarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeInt64Var(variableName, 12)
+	v, err := GetInt64Var(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -81,7 +81,7 @@ func TestGetInt64VarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt64Var(variableName, 0)
+			v, err := GetInt64Var(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")

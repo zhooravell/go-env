@@ -37,7 +37,7 @@ func TestGetUint8Var(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeUint8Var(variableName, tt.fallback)
+			v, err := GetUint8Var(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -54,7 +54,7 @@ func TestGetUint8Var(t *testing.T) {
 func TestGetUint8VarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeUint8Var(variableName, 12)
+	v, err := GetUint8Var(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -74,7 +74,7 @@ func TestGetUint8VarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeUint8Var(variableName, 0)
+			v, err := GetUint8Var(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")

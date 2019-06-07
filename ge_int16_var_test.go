@@ -43,7 +43,7 @@ func TestGetInt16Var(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt16Var(variableName, tt.fallback)
+			v, err := GetInt16Var(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -60,7 +60,7 @@ func TestGetInt16Var(t *testing.T) {
 func TestGetInt16VarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeInt16Var(variableName, 12)
+	v, err := GetInt16Var(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -80,7 +80,7 @@ func TestGetInt16VarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeInt16Var(variableName, 0)
+			v, err := GetInt16Var(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")

@@ -39,7 +39,7 @@ func TestGetUint32Var(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeUint32Var(variableName, tt.fallback)
+			v, err := GetUint32Var(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -56,7 +56,7 @@ func TestGetUint32Var(t *testing.T) {
 func TestGetUint32VarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeUint32Var(variableName, 12)
+	v, err := GetUint32Var(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -76,7 +76,7 @@ func TestGetUint32VarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeUint32Var(variableName, 0)
+			v, err := GetUint32Var(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")

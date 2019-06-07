@@ -38,7 +38,7 @@ func TestGetIntVar(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeIntVar(variableName, tt.fallback)
+			v, err := GetIntVar(variableName, tt.fallback)
 
 			if err != nil {
 				t.Error(err)
@@ -55,7 +55,7 @@ func TestGetIntVar(t *testing.T) {
 func TestGetIntVarDefault(t *testing.T) {
 	os.Clearenv()
 
-	v, err := GeIntVar(variableName, 12)
+	v, err := GetIntVar(variableName, 12)
 
 	if err != nil {
 		t.Error(err)
@@ -75,7 +75,7 @@ func TestGetIntVarInvalidValue(t *testing.T) {
 				t.Error(err)
 			}
 
-			v, err := GeIntVar(variableName, 0)
+			v, err := GetIntVar(variableName, 0)
 
 			if err == nil {
 				t.Error("Must be error")
