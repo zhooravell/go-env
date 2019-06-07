@@ -64,10 +64,6 @@ func loadVariablesFromFile(fileName string, overload bool) error {
 
 	scanner := bufio.NewScanner(file)
 
-	if err = scanner.Err(); err != nil {
-		return err
-	}
-
 	currentEnv := map[string]bool{}
 	for _, rawEnvLine := range os.Environ() {
 		currentEnv[strings.Split(rawEnvLine, "=")[0]] = true
@@ -93,6 +89,10 @@ func loadVariablesFromFile(fileName string, overload bool) error {
 		if err := os.Setenv(k, v); err != nil {
 			return err
 		}
+	}
+
+	if err = scanner.Err(); err != nil {
+		return err
 	}
 
 	return nil
@@ -121,12 +121,6 @@ func parseLine(line string) (string, string, error) {
 
 //parseValue parse variable value
 func parseValue(value string) string {
-	value = strings.Trim(value, " ")
-
-	if len(value) == 0 {
-		return value
-	}
-
 	singleQuotes := regexp.MustCompile(`\A'(.*)'\z`).FindStringSubmatch(value)
 	doubleQuotes := regexp.MustCompile(`\A"(.*)"\z`).FindStringSubmatch(value)
 

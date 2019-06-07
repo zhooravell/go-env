@@ -18,6 +18,7 @@ ENV_B='https://google.com'
 ENV_C=c
 ENV_D="test\n test"
 ENV_E=2
+ENV_F="test\r test"
 `)
 
 	if err := ioutil.WriteFile(defaultFileName, envContent, 0777); err != nil {
@@ -40,11 +41,12 @@ ENV_E=2
 		t.Error("ENV_C must equal 'c'")
 	}
 
-	de := `test
- test`
-
-	if d := os.Getenv("ENV_D"); d != de {
+	if d := os.Getenv("ENV_D"); d != "test\n test" {
 		t.Error("ENV_D must equal 'test\n test'")
+	}
+
+	if d := os.Getenv("ENV_F"); d != "test\r test" {
+		t.Error("ENV_F must equal 'test\r test'")
 	}
 
 	if e := os.Getenv("ENV_E"); e != "overload" {
@@ -74,6 +76,7 @@ ENV_B='https://google.com'
 	secondContent := []byte(`
 ENV_C=c
 ENV_E=2
+export ENV_F=export
 `)
 
 	if err := ioutil.WriteFile("second.env", secondContent, 0777); err != nil {
@@ -100,11 +103,41 @@ ENV_E=2
 		t.Error("ENV_E must equal '2'")
 	}
 
+	if e := os.Getenv("ENV_F"); e != "export" {
+		t.Error("ENV_F must equal 'export'")
+	}
+
 	if err := os.Remove("first.env"); err != nil {
 		t.Error(err)
 	}
 
 	if err := os.Remove("second.env"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestLoadFileNotFound(t *testing.T) {
+	os.Clearenv()
+
+	if err := Load("test.env"); err == nil {
+		t.Error("Must been error")
+	}
+}
+
+func TestLoadInvalidFormat(t *testing.T) {
+	os.Clearenv()
+
+	envContent := []byte("ENV_A")
+
+	if err := ioutil.WriteFile(defaultFileName, envContent, 0777); err != nil {
+		t.Error(err)
+	}
+
+	if err := Load(); err == nil {
+		t.Error("Must been error")
+	}
+
+	if err := os.Remove(defaultFileName); err != nil {
 		t.Error(err)
 	}
 }
