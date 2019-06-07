@@ -14,6 +14,43 @@ $ dep ensure -add github.com/zhooravell/go-env
 ```
 ## Usage
 
+```go
+package main
+
+import (
+	"github.com/zhooravell/go-env"
+	"log"
+)
+
+func init()  {
+	if err := env.Load(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func main()  {
+	s := env.GetVar("ENV_STRING", "")
+	b, _ := env.GetBoolVar("ENV_BOOL", false)
+	i, _ := env.GetIntVar("ENV_INT", 0)
+	i8, _ := env.GetInt8Var("ENV_INT8", 0)
+	i16, _ := env.GetInt16Var("ENV_INT16", 0)
+	i32, _ := env.GetInt32Var("ENV_INT32", 0)
+	i64, _ := env.GetInt32Var("ENV_INT64", 0)
+	f32, _ := env.GetFloat32Var("ENV_FLOAT32", 0)
+	f64, _ := env.GetFloat64Var("ENV_FLOAT64", 0)
+
+	log.Println("string: ", s)
+	log.Println("bool: ", b)
+	log.Println("int: ", i)
+	log.Println("int8: ", i8)
+	log.Println("int16: ", i16)
+	log.Println("int32: ", i32)
+	log.Println("int64: ", i64)
+	log.Println("float32: ", f32)
+	log.Println("float64: ", f64)
+}
+```
+
 ## Source(s)
 
 * [environment variable wiki](https://en.wikipedia.org/wiki/Environment_variable)
