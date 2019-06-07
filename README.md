@@ -2,7 +2,7 @@ Go env
 ======
 > GoLang package to load environment variables from `.env`.
 
-[![codecov][scrutinizer-image]][scrutinizer-link] [![License][license-image]][license-link] [![Build Status][travis-image]][travis-link] [![codecov][codecov-image]][codecov-link] 
+[![Go Report Card][goreportcard-image]][goreportcard-image] [![codecov][scrutinizer-image]][scrutinizer-link] [![License][license-image]][license-link] [![Build Status][travis-image]][travis-link] [![codecov][codecov-image]][codecov-link] 
 ## Installation
 Native
 ```bash
@@ -33,3 +33,6 @@ $ dep ensure -add github.com/zhooravell/go-env
 
 [scrutinizer-link]: https://scrutinizer-ci.com/g/zhooravell/go-env/?branch=master
 [scrutinizer-image]: https://scrutinizer-ci.com/g/zhooravell/go-env/badges/quality-score.png?b=master
+
+[goreportcard-link]: https://goreportcard.com/report/github.com/zhooravell/go-env
+[goreportcard-image]: https://goreportcard.com/badge/github.com/zhooravell/go-env
