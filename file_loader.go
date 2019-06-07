@@ -18,10 +18,7 @@ const (
 	exportPrefix    = "export"
 )
 
-var (
-	ErrNoSeparator = errors.New("no separator")
-	ErrSeparate    = errors.New("can't separate key from value")
-)
+var ErrNoSeparator = errors.New("no separator")
 
 //Load environment variables from files.
 //If the variable already exists, its value will not change.
@@ -63,10 +60,9 @@ func loadVariablesFromFile(fileName string, overload bool) error {
 	}()
 
 	scanner := bufio.NewScanner(file)
-
-	currentEnv := map[string]bool{}
+	envs := map[string]bool{}
 	for _, rawEnvLine := range os.Environ() {
-		currentEnv[strings.Split(rawEnvLine, "=")[0]] = true
+		envs[strings.Split(rawEnvLine, "=")[0]] = true
 	}
 
 	for scanner.Scan() {
@@ -76,13 +72,13 @@ func loadVariablesFromFile(fileName string, overload bool) error {
 			continue
 		}
 
-		k, v, err := parseLine(scanner.Text())
+		k, v, err := parseLine(line)
 
 		if err != nil {
 			return err
 		}
 
-		if _, ok := currentEnv[k]; ok && !overload {
+		if _, ok := envs[k]; ok && !overload {
 			continue
 		}
 
@@ -104,32 +100,27 @@ func parseLine(line string) (string, string, error) {
 		return "", "", ErrNoSeparator
 	}
 
-	splitString := strings.SplitN(line, separatorChar, 2)
-
-	if len(splitString) != 2 {
-		return "", "", ErrSeparate
-	}
-
-	k := splitString[0]
+	ss := strings.SplitN(line, separatorChar, 2)
+	k := ss[0]
 
 	if strings.HasPrefix(k, exportPrefix) {
 		k = strings.TrimPrefix(k, exportPrefix)
 	}
 
-	return strings.TrimSpace(k), parseValue(splitString[1]), nil
+	return strings.TrimSpace(k), parseValue(ss[1]), nil
 }
 
 //parseValue parse variable value
-func parseValue(value string) string {
-	singleQuotes := regexp.MustCompile(`\A'(.*)'\z`).FindStringSubmatch(value)
-	doubleQuotes := regexp.MustCompile(`\A"(.*)"\z`).FindStringSubmatch(value)
+func parseValue(val string) string {
+	singleQuotes := regexp.MustCompile(`\A'(.*)'\z`).FindStringSubmatch(val)
+	doubleQuotes := regexp.MustCompile(`\A"(.*)"\z`).FindStringSubmatch(val)
 
 	if singleQuotes != nil || doubleQuotes != nil {
-		value = value[1 : len(value)-1] // pull the quotes off the edges
+		val = val[1 : len(val)-1] // pull the quotes off the edges
 	}
 
 	if doubleQuotes != nil {
-		value = regexp.MustCompile(`\\.`).ReplaceAllStringFunc(value, func(match string) string {
+		val = regexp.MustCompile(`\\.`).ReplaceAllStringFunc(val, func(match string) string {
 			switch strings.TrimPrefix(match, `\`) {
 			case "n":
 				return "\n"
@@ -140,10 +131,10 @@ func parseValue(value string) string {
 			}
 		})
 
-		value = regexp.MustCompile(`\\([^$])`).ReplaceAllString(value, "$1") // unescape characters
+		val = regexp.MustCompile(`\\([^$])`).ReplaceAllString(val, "$1") // unescape characters
 	}
 
-	return value
+	return val
 }
 
 //fileNamesOrDefault if slice is empty return slice with default filename

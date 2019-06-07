@@ -19,6 +19,7 @@ ENV_C=c
 ENV_D="test\n test"
 ENV_E=2
 ENV_F="test\r test"
+ENV_G="test=test\\a"
 `)
 
 	if err := ioutil.WriteFile(defaultFileName, envContent, 0777); err != nil {
@@ -53,6 +54,10 @@ ENV_F="test\r test"
 		t.Error("ENV_E must equal 'overload'")
 	}
 
+	if e := os.Getenv("ENV_G"); e != "test=test\\a" {
+		t.Error("ENV_G must equal 'test=test\\a")
+	}
+
 	if err := os.Remove(defaultFileName); err != nil {
 		t.Error(err)
 	}
@@ -64,22 +69,11 @@ func TestLoadWithOverriding(t *testing.T) {
 		t.Error(err)
 	}
 
-	firstContent := []byte(`
-ENV_A=1
-ENV_B='https://google.com'
-`)
-
-	if err := ioutil.WriteFile("first.env", firstContent, 0777); err != nil {
+	if err := ioutil.WriteFile("first.env", []byte("ENV_A=1\nENV_B='https://google.com'\n"), 0777); err != nil {
 		t.Error(err)
 	}
 
-	secondContent := []byte(`
-ENV_C=c
-ENV_E=2
-export ENV_F=export
-`)
-
-	if err := ioutil.WriteFile("second.env", secondContent, 0777); err != nil {
+	if err := ioutil.WriteFile("second.env", []byte("ENV_C=c\nENV_E=2\nexport ENV_F=export\n"), 0777); err != nil {
 		t.Error(err)
 	}
 
@@ -118,18 +112,21 @@ export ENV_F=export
 
 func TestLoadFileNotFound(t *testing.T) {
 	os.Clearenv()
-
 	if err := Load("test.env"); err == nil {
+		t.Error("Must been error")
+	}
+}
+
+func TestLoadWithOverridingFileNotFound(t *testing.T) {
+	os.Clearenv()
+	if err := LoadWithOverriding("test.env"); err == nil {
 		t.Error("Must been error")
 	}
 }
 
 func TestLoadInvalidFormat(t *testing.T) {
 	os.Clearenv()
-
-	envContent := []byte("ENV_A")
-
-	if err := ioutil.WriteFile(defaultFileName, envContent, 0777); err != nil {
+	if err := ioutil.WriteFile(defaultFileName, []byte("ENV_A"), 0777); err != nil {
 		t.Error(err)
 	}
 
