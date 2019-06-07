@@ -18,6 +18,7 @@ const (
 	exportPrefix    = "export"
 )
 
+//ErrNoSeparator this error will return if no separator char found in line
 var ErrNoSeparator = errors.New("no separator")
 
 //Load environment variables from files.
